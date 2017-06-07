@@ -9,7 +9,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class ClienteRestClient {
+public class RestClient {
     
     public static void main(String[] args) throws ClientProtocolException, IOException {
         
