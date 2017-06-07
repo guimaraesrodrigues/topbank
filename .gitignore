@@ -7,7 +7,7 @@ staticfiles
 .ipynb_checkpoints/
 /client/nbproject/
 /client/build/
-
+*.properties
 *.class
 
 # Mobile Tools for Java (J2ME)
