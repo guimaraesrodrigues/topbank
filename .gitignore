@@ -5,7 +5,7 @@
 __pycache__
 staticfiles
 .ipynb_checkpoints/
-/client/nbproject/private/
+/client/nbproject/
 /client/build/
 
 *.class
