@@ -18,4 +18,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class ContaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Conta
-        fields = ('nome_cliente', 'saldo')
+        fields = ('nome_cliente', 'saldo_poupanca', 'saldo_corrente')
