@@ -14,7 +14,7 @@ public class ClienteRestClient {
     public static void main(String[] args) throws ClientProtocolException, IOException {
         
         HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet("http://127.0.0.1:8000/");
+        HttpGet request = new HttpGet("http://127.0.0.1:8000/contas");
         HttpResponse response = client.execute(request);
         BufferedReader rd = new BufferedReader (new InputStreamReader(response.getEntity().getContent()));
         String line = "";

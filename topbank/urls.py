@@ -12,6 +12,8 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'contas', views.ContaViewSet)
+router.register(r'agencias', views.AgenciaViewSet)
+router.register(r'transferencias', views.TransferenciaViewSet)
 
 schema_view = get_swagger_view(title='TopBank API')
 

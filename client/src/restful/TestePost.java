@@ -13,9 +13,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class TestePost {
     public static void main(String[] args) throws ClientProtocolException, IOException {
         HttpClient client = new DefaultHttpClient();        
-        HttpPost post = new HttpPost("http://restUrl");
+        HttpPost post = new HttpPost("http://127.0.0.1:8000/contas/");
         
-        StringEntity input = new StringEntity("http://127.0.0.1:8000/conta");
+        StringEntity input = new StringEntity("{\"saldo_poupanca\":100,\"saldo_corrente\":100,\"nome_cliente\":\"felipe\"}");
+        input.setContentType("application/json");
         post.setEntity(input);
         
         HttpResponse response = client.execute(post);

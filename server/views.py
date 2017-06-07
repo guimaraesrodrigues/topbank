@@ -6,27 +6,22 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from server.models import Conta
-from server.serializers import UserSerializer, GroupSerializer, ContaSerializer
+from server.models import Conta, Agencia, Transferencia
+from server.serializers import UserSerializer, GroupSerializer, ContaSerializer, AgenciaSerializer, TransferenciaSerializer
 
 class ContaViewSet(viewsets.ModelViewSet):
     queryset = Conta.objects.all()
     serializer_class = ContaSerializer
 
 
-class ContaList(APIView):
-    def get(self, request):
-        contas = Conta.objects.all()
-        serializer = ContaSerializer(contas, many=True)
-        return Response(serializer.data)
+class AgenciaViewSet(viewsets.ModelViewSet):
+    queryset = Agencia.objects.all()
+    serializer_class = AgenciaSerializer
 
-    def post(self, request, format=None):
-        serializer = ContaSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class TransferenciaViewSet(viewsets.ModelViewSet):
+    queryset = Transferencia.objects.all()
+    serializer_class = TransferenciaSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -43,3 +38,18 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class ContaList(APIView):
+    def get(self, request):
+        contas = Conta.objects.all()
+        serializer = ContaSerializer(contas, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ContaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
