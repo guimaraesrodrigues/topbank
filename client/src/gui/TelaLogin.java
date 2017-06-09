@@ -27,6 +27,7 @@ public class TelaLogin extends javax.swing.JFrame {
         this.rest = rest;
         initComponents();
         this.setVisible(true);
+        this.buttonLogin.requestFocus();
     }
 
     /**
@@ -50,6 +51,7 @@ public class TelaLogin extends javax.swing.JFrame {
         labelUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         labelUsuario.setText("Nº Conta:");
 
+        contaTextField.setText("1");
         contaTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 contaTextFieldActionPerformed(evt);
@@ -71,6 +73,7 @@ public class TelaLogin extends javax.swing.JFrame {
         labelUsuario4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         labelUsuario4.setText("Nº Agência:");
 
+        agenciaTextField.setText("1");
         agenciaTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agenciaTextFieldActionPerformed(evt);
