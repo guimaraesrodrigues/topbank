@@ -5,7 +5,11 @@
  */
 package gui;
 
-import restful.RestClient;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONObject;
+import restful.RestServices;
 
 
 /**
@@ -14,12 +18,13 @@ import restful.RestClient;
  */
 public class TelaLogin extends javax.swing.JFrame {
 
-    RestClient client;
+    RestServices rest;
+    
     String nome;
     char[] senha;
     
-    public TelaLogin(RestClient client) {
-        this.client = client;
+    public TelaLogin(RestServices rest) {
+        this.rest = rest;
         initComponents();
         this.setVisible(true);
     }
@@ -34,30 +39,41 @@ public class TelaLogin extends javax.swing.JFrame {
     private void initComponents() {
 
         labelUsuario = new javax.swing.JLabel();
-        campoUsuario = new javax.swing.JTextField();
+        contaTextField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         buttonLogin = new javax.swing.JButton();
+        labelUsuario4 = new javax.swing.JLabel();
+        agenciaTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         labelUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        labelUsuario.setText("Usuário:");
+        labelUsuario.setText("Nº Conta:");
 
-        campoUsuario.addActionListener(new java.awt.event.ActionListener() {
+        contaTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoUsuarioActionPerformed(evt);
+                contaTextFieldActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Leilão TOPzera!");
+        jLabel1.setText("TopBank");
         jLabel1.setToolTipText("");
 
         buttonLogin.setText("ENTRAR");
         buttonLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonLoginActionPerformed(evt);
+            }
+        });
+
+        labelUsuario4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        labelUsuario4.setText("Nº Agência:");
+
+        agenciaTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agenciaTextFieldActionPerformed(evt);
             }
         });
 
@@ -68,54 +84,81 @@ public class TelaLogin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
+                        .addGap(42, 42, 42)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(buttonLogin)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(labelUsuario)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelUsuario)
+                                    .addComponent(labelUsuario4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(campoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(29, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(contaTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                                    .addComponent(agenciaTextField))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addComponent(jLabel1)
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelUsuario)
-                    .addComponent(campoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(contaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelUsuario4)
+                    .addComponent(agenciaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(buttonLogin)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoUsuarioActionPerformed
+    private void contaTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contaTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_campoUsuarioActionPerformed
+    }//GEN-LAST:event_contaTextFieldActionPerformed
 
     private void buttonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLoginActionPerformed
-        this.nome = campoUsuario.getText();
        
-        TelaPrincipal tp = new TelaPrincipal(client);
        
+        JSONObject agencia = new JSONObject();
+        JSONObject conta = new JSONObject();     
+          
+        int n_agencia = Integer.parseInt(agenciaTextField.getText());    
+        int n_conta = Integer.parseInt(contaTextField.getText());
+              
+        try {
+            agencia = rest.getMethod(rest.getServices().getString("agencias")+n_agencia);
+            conta = rest.getMethod(rest.getServices().getString("contas")+n_conta);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         this.setVisible(false);
+        TelaPrincipal tp = new TelaPrincipal(this.rest, agencia, conta);
     }//GEN-LAST:event_buttonLoginActionPerformed
+
+    private void agenciaTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agenciaTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_agenciaTextFieldActionPerformed
 
     /**
      * @param args the command line arguments
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField agenciaTextField;
     private javax.swing.JButton buttonLogin;
-    private javax.swing.JTextField campoUsuario;
+    private javax.swing.JTextField contaTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelUsuario;
+    private javax.swing.JLabel labelUsuario4;
     // End of variables declaration//GEN-END:variables
 }

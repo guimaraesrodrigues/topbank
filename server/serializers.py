@@ -18,16 +18,16 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AgenciaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Agencia
-        fields = ('nome_banco', 'numero',)
+        fields = ('id', 'url', 'nome_banco', 'numero')
 
 
 class ContaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Conta
-        fields = ('nome_cliente', 'saldo_poupanca', 'saldo_corrente', 'agencia')
+        fields = ('id', 'url', 'nome_cliente', 'saldo_poupanca', 'saldo_corrente', 'agencia')
 
 
 class TransferenciaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transferencia
-        fields = ('conta_origem', 'conta_destino', 'data', 'tipo')
+        fields = ('url', 'conta_origem', 'conta_destino', 'data', 'tipo')

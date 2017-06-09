@@ -5,27 +5,38 @@ import java.awt.HeadlessException;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONObject;
 
-import restful.RestClient;
+import restful.RestServices;
 
 public class TelaPrincipal extends javax.swing.JFrame {
     String user;
-    RestClient client;
+    
+    RestServices rest;
+    JSONObject agencia;
+    JSONObject conta;    
+    
     DefaultListModel modelListaLeiloes = new DefaultListModel();
     DefaultTableModel modeloTable;
 
     public TelaPrincipal() throws HeadlessException {
     }
-    /**
-     * Creates new form TelaPrincipal
-     */
-    public TelaPrincipal(RestClient client) {
-        this.client = client;
-        //this.user = client.getNome_usuario();
+    
+    public TelaPrincipal(RestServices rest, JSONObject agencia, JSONObject conta) {
+        this.rest = rest;
+        this.agencia = agencia;
+        this.conta = conta;
+       
         
         initComponents();
-        modeloTable = (DefaultTableModel)jTableLeiloes.getModel();
-        this.statusLabel.setText("Pronto!");
+
+        statusLabel.setText("Pronto!");
+        accountLabel.setText(""+conta.getInt("id"));
+        userLabel.setText(conta.getString("nome_cliente"));
+        bankLabel.setText(agencia.getString("nome_banco"));
+        agencyLabel.setText(""+agencia.getInt("id"));
+        
+       
         setVisible(true);
     }
 
@@ -39,36 +50,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         titulo = new javax.swing.JLabel();
-        tituloUltimosLeiloes = new javax.swing.JLabel();
-        TituloMeusLeiloes = new javax.swing.JLabel();
-        usuario = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        listaMeusLeiloes = new javax.swing.JList<>();
+        userLabel = new javax.swing.JLabel();
         jButtonSair = new javax.swing.JButton();
-        botaoNovoProduto = new javax.swing.JButton();
-        jButtonAtualiza = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableLeiloes = new javax.swing.JTable();
-        jButtonLance = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jTextLance = new javax.swing.JTextField();
-        botaoCancelarLeilao = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
-        buttonMeusLances = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        accountLabel = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        bankLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        agencyLabel = new javax.swing.JLabel();
+        buttonSaldoP = new javax.swing.JButton();
+        buttonSaldoC = new javax.swing.JButton();
+        buttonDeposito = new javax.swing.JButton();
+        buttonSaque = new javax.swing.JButton();
+        buttonTransf = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         titulo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        titulo.setText("Leilão TOPzera!");
+        titulo.setText("TopBank!");
 
-        tituloUltimosLeiloes.setText("Meus Leilões TOPzera:");
-
-        TituloMeusLeiloes.setText("Leilões ativos:");
-
-        usuario.setText("USUARIO: "+user);
-
-        jScrollPane3.setViewportView(listaMeusLeiloes);
+        userLabel.setText("USUARIO: "+user);
 
         jButtonSair.setText("SAIR");
         jButtonSair.addActionListener(new java.awt.event.ActionListener() {
@@ -77,76 +82,38 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        botaoNovoProduto.setText("Novo Produto TOP");
-        botaoNovoProduto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoNovoProdutoActionPerformed(evt);
-            }
-        });
-
-        jButtonAtualiza.setText("ATUALIZAR LEILÕES TOPS");
-        jButtonAtualiza.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAtualizaActionPerformed(evt);
-            }
-        });
-
-        jTableLeiloes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Nome", "Descrição", "Preço", "Tempo final"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTableLeiloes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableLeiloesMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTableLeiloes);
-
-        jButtonLance.setText("Novo Lance TOP");
-        jButtonLance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonLanceActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setText("Valor:");
-
-        jTextLance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextLanceActionPerformed(evt);
-            }
-        });
-
-        botaoCancelarLeilao.setText("Cancelar Leilão TOP");
-        botaoCancelarLeilao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botaoCancelarLeilaoActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText("Status: ");
 
         statusLabel.setText("status");
 
-        buttonMeusLances.setText("Meus Lances");
-        buttonMeusLances.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setText("Usuário: ");
+
+        accountLabel.setText("<Account Code>");
+
+        jLabel3.setText("Nº Conta:");
+
+        jLabel5.setText("Banco:");
+
+        bankLabel.setText("<Bank Code>");
+
+        jLabel6.setText("Nº Agência:");
+
+        agencyLabel.setText("<Agency Code>");
+
+        buttonSaldoP.setText("Saldo Poupança");
+
+        buttonSaldoC.setText("Saldo Conta Corrente");
+
+        buttonDeposito.setText("Depósito");
+        buttonDeposito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonMeusLancesActionPerformed(evt);
+                buttonDepositoActionPerformed(evt);
             }
         });
+
+        buttonSaque.setText("Saque");
+
+        buttonTransf.setText("Transferência");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,91 +122,91 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonSair))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(userLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(accountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                            .addGap(29, 29, 29)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(bankLabel))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(agencyLabel))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(titulo)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonSair))))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(tituloUltimosLeiloes)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(titulo)
-                                        .addGap(49, 49, 49)))
-                                .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(botaoNovoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(botaoCancelarLeilao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(30, 30, 30)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(TituloMeusLeiloes)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButtonAtualiza, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(3, 3, 3)
-                                        .addComponent(jTextLance, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButtonLance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buttonMeusLances, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                            .addComponent(buttonSaldoP, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonSaldoC, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonTransf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonSair)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(usuario))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TituloMeusLeiloes)
-                    .addComponent(tituloUltimosLeiloes))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(botaoNovoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonLance, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextLance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(botaoCancelarLeilao, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonAtualiza, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(buttonMeusLances)
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jButtonSair)))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(bankLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
-                            .addComponent(statusLabel))
-                        .addContainerGap())))
+                            .addComponent(jLabel6)
+                            .addComponent(agencyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(accountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(userLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))))
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonSaldoC, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonSaldoP, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(buttonTransf, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(75, 75, 75)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(statusLabel)))
         );
 
         pack();
@@ -250,38 +217,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         System.exit(0);        
     }//GEN-LAST:event_jButtonSairActionPerformed
 
-    private void botaoNovoProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoProdutoActionPerformed
+    private void buttonDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDepositoActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_botaoNovoProdutoActionPerformed
-
-    private void jButtonAtualizaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtualizaActionPerformed
-        //novo metodo para preencher jtable
-        atualizaJtable();
-        
-        atualizaMeusLeiloes();
-    }//GEN-LAST:event_jButtonAtualizaActionPerformed
-
-    private void jButtonLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLanceActionPerformed
-      
-    }//GEN-LAST:event_jButtonLanceActionPerformed
-
-    private void jTextLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextLanceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextLanceActionPerformed
-
-    private void jTableLeiloesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableLeiloesMouseClicked
-        jTextLance.setText(""+modeloTable.getValueAt(jTableLeiloes.getSelectedRow(), 3));
-    }//GEN-LAST:event_jTableLeiloesMouseClicked
-
-    private void botaoCancelarLeilaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarLeilaoActionPerformed
-        
-            
-    }//GEN-LAST:event_botaoCancelarLeilaoActionPerformed
-
-    private void buttonMeusLancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMeusLancesActionPerformed
-       
-    }//GEN-LAST:event_buttonMeusLancesActionPerformed
+    }//GEN-LAST:event_buttonDepositoActionPerformed
 
     /*TODO: Reescrever esse método para atualizar meus leiloes*/
     public void atualizaMeusLeiloes(){
@@ -297,23 +235,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel TituloMeusLeiloes;
-    private javax.swing.JButton botaoCancelarLeilao;
-    private javax.swing.JButton botaoNovoProduto;
-    private javax.swing.JButton buttonMeusLances;
-    private javax.swing.JButton jButtonAtualiza;
-    private javax.swing.JButton jButtonLance;
+    private javax.swing.JLabel accountLabel;
+    private javax.swing.JLabel agencyLabel;
+    private javax.swing.JLabel bankLabel;
+    private javax.swing.JButton buttonDeposito;
+    private javax.swing.JButton buttonSaldoC;
+    private javax.swing.JButton buttonSaldoP;
+    private javax.swing.JButton buttonSaque;
+    private javax.swing.JButton buttonTransf;
     private javax.swing.JButton jButtonSair;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTableLeiloes;
-    private javax.swing.JTextField jTextLance;
-    private javax.swing.JList<String> listaMeusLeiloes;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JLabel titulo;
-    private javax.swing.JLabel tituloUltimosLeiloes;
-    private javax.swing.JLabel usuario;
+    private javax.swing.JLabel userLabel;
     // End of variables declaration//GEN-END:variables
 }
