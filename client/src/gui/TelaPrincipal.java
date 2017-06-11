@@ -84,9 +84,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         contaAlvoTraTextField = new javax.swing.JTextField();
         valorTraTextField = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        transfComboBox = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         valorSaqTextField = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        deposComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -194,7 +196,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabel13.setText("Tipo transf:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        transfComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel14.setText("Valor:");
 
@@ -203,6 +205,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 valorSaqTextFieldActionPerformed(evt);
             }
         });
+
+        jLabel15.setText("Tipo depos:");
+
+        deposComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Poupanca", "Corrente" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,11 +230,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                         .addComponent(buttonSaque, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(buttonSaldoP, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(32, 32, 32)
-                                .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(deposComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(buttonSaldoC, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,9 +250,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                             .addComponent(contaDepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(41, 41, 41)
-                                        .addComponent(jLabel12)
-                                        .addGap(32, 32, 32)))
-                                .addGap(28, 28, 28)))
+                                        .addComponent(jLabel12)))))
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -254,7 +262,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(valorTraTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
                                     .addComponent(contaAlvoTraTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(transfComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(buttonTransf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -348,12 +356,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                         .addComponent(jLabel7)
                                         .addComponent(valorDepTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonSaldoP, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buttonSaldoP, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel15)
+                                .addComponent(deposComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(buttonTransf, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(buttonTransf, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buttonDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -380,7 +391,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(transfComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(96, 96, 96))))
         );
 
@@ -394,19 +405,39 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void buttonDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDepositoActionPerformed
         
-        if (contaDepTextField.getText().isEmpty() || valorDepTextField.getText().isEmpty()){
+        String tipoDeposito = (String) deposComboBox.getSelectedItem() ;
+        JSONObject conta_destino = new JSONObject();
+        double novo_saldo = 0;
+        
+        if (contaDepTextField.getText().isEmpty() || valorDepTextField.getText().isEmpty() || tipoDeposito.isEmpty()){
             JOptionPane.showMessageDialog(this, "Insira as infos para deposito!");
             return;
         }
             
-        double deposito = Double.parseDouble(valorDepTextField.getText());
-        double novo_saldo = deposito + this.conta.getDouble("saldo_corrente");  
-
-        conta.put("saldo_corrente", novo_saldo);        
+        double deposito = Double.parseDouble(valorDepTextField.getText());          
+        String id_dest = contaDepTextField.getText();
+        
+        try {
+            conta_destino = rest.getMethod(rest.getServices().getString("contas")+id_dest+"");
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String tipo_conta = (String) deposComboBox.getSelectedItem();
+        
+        if(tipo_conta.equals("Corrente")){
+            novo_saldo = deposito + conta_destino.getDouble("saldo_corrente");
+            conta_destino.put("saldo_corrente", novo_saldo);
+        }
+        else if (tipo_conta.equals("Poupanca")){
+            novo_saldo = deposito + conta_destino.getDouble("saldo_poupanca");
+            conta_destino.put("saldo_poupanca", novo_saldo);
+        }
+        
         
         try {
             //conta = rest.getMethod(rest.getServices().getString("contas")+conta.getInt("id"));
-            conta = rest.putMethod(rest.getServices().getString("contas")+contaDepTextField.getText()+"/", conta);
+            conta = rest.putMethod(rest.getServices().getString("contas")+id_dest+"/", conta_destino);
         } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -518,14 +549,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton buttonTransf;
     private javax.swing.JTextField contaAlvoTraTextField;
     private javax.swing.JTextField contaDepTextField;
+    private javax.swing.JComboBox<String> deposComboBox;
     private javax.swing.JButton jButtonSair;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -537,6 +569,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JLabel titulo;
+    private javax.swing.JComboBox<String> transfComboBox;
     private javax.swing.JLabel userLabel;
     private javax.swing.JTextField valorDepTextField;
     private javax.swing.JTextField valorSaqTextField;
