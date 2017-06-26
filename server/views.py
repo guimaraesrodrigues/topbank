@@ -24,6 +24,8 @@ class ContaViewSet(viewsets.ModelViewSet):
             self.sacar(request, serializer, tipo_conta)
         elif request.data['tipo_op'] == 'deposito':
             self.depositar(request, serializer, tipo_conta)
+        elif request.data['tipo_op'] == 'transf':
+            self.transferir(request, serializer, tipo_conta)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -38,10 +40,13 @@ class ContaViewSet(viewsets.ModelViewSet):
             novo_saldo = request.data['saldo_corrente'] - valor_saque
             if serializer.is_valid():
                 serializer.save(saldo_corrente=novo_saldo)
+            return valor_saque
+
         elif tipo_conta == 'Poupanca':
             novo_saldo = request.data['saldo_poupanca'] - valor_saque
             if serializer.is_valid():
                 serializer.save(saldo_poupanca=novo_saldo)
+            return valor_saque
 
     def depositar(self, request, serializer, tipo_conta):
         valor_deposito = request.data['valor_deposito']
@@ -49,10 +54,16 @@ class ContaViewSet(viewsets.ModelViewSet):
             novo_saldo = valor_deposito + request.data['saldo_corrente']
             if serializer.is_valid():
                 serializer.save(saldo_corrente=novo_saldo)
+            return valor_deposito
+
         elif tipo_conta == 'Poupanca':
             novo_saldo = valor_deposito + request.data['saldo_poupanca']
             if serializer.is_valid():
                 serializer.save(saldo_poupanca=novo_saldo)
+            return valor_deposito
+
+    def transferir(self, request, serializer, tipo_conta):
+        pass
 
 
 

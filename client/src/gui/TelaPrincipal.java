@@ -147,6 +147,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         buttonTransf.setText("Transferir");
+        buttonTransf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonTransfActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Conta alvo:");
 
@@ -512,38 +517,36 @@ public class TelaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_transfComboBoxActionPerformed
 
-    /*TODO: Reescrever esse método para atualizar meus leiloes*/
-    public void atualizaMeusLeiloes(){
-        modelListaLeiloes.clear();
+    private void buttonTransfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTransfActionPerformed
+        if (valorTraTextField.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Insira um valor para transferência!");
+            return;
+        }
         
-    }
+        JSONObject conta_origem = new JSONObject();
+        
+        try {
+            conta_origem = rest.getMethod(rest.getServices().getString("contas")+conta.getInt("id")+"");
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        String tipo_transf = (String) transfComboBox.getSelectedItem();
+        
+        conta_origem.put("valor_saque", Float.parseFloat(valorSaqTextField.getText()));        
+        conta_origem.put("tipo_transf", tipo_transf);
+        conta_origem.put("conta_dest", Integer.parseInt(contaAlvoTraTextField.getText()));
+        conta_origem.put("tipo_op", "transf");
+        
+        try {
+            //conta = rest.getMethod(rest.getServices().getString("contas")+conta.getInt("id"));
+            conta = rest.putMethod(rest.getServices().getString("contas")+conta.getInt("id")+"/", conta_origem);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //statusLabel.setText("Saque realizado com sucesso!");
+        JOptionPane.showMessageDialog(this, "Saque realizado com sucesso!");
+    }//GEN-LAST:event_buttonTransfActionPerformed
     
-    //esse metodo atualiza os leiloes ativos
-    private void atualizaJtable(){
-        modeloTable.setRowCount(0);//limpamos a tabela 
-        
-       
-    }
-    
-    private String[] doubleInputDialog(String title){
-        
-        JPanel myPanel = new JPanel();
-        JTextField conta = new JTextField(5);
-        JTextField deposito = new JTextField(5);
-        myPanel.add(conta);
-        myPanel.add(deposito);
-        
-        Thread t = new Thread(new Runnable(){
-                public void run(){
-                    JOptionPane.showMessageDialog(null, myPanel, title, JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        );
-        t.start();
-        System.out.println(""+conta.getText()+deposito.getText());
-        return new String[]{ conta.getText(), deposito.getText() };
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel accountLabel;
     private javax.swing.JLabel agencyLabel;
