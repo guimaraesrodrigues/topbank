@@ -13,10 +13,58 @@ class ContaViewSet(viewsets.ModelViewSet):
     queryset = Conta.objects.all()
     serializer_class = ContaSerializer
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        # ipdb; ipdb.set_trace()
+        tipo_conta = request.data['tipo_conta']
+
+        if request.data['tipo_op'] == 'saque':
+            self.sacar(request, serializer, tipo_conta)
+        elif request.data['tipo_op'] == 'deposito':
+            self.depositar(request, serializer, tipo_conta)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def sacar(self, request, serializer, tipo_conta):
+        valor_saque = request.data['valor_saque']
+        if tipo_conta == 'Corrente':
+            novo_saldo = request.data['saldo_corrente'] - valor_saque
+            if serializer.is_valid():
+                serializer.save(saldo_corrente=novo_saldo)
+        elif tipo_conta == 'Poupanca':
+            novo_saldo = request.data['saldo_poupanca'] - valor_saque
+            if serializer.is_valid():
+                serializer.save(saldo_poupanca=novo_saldo)
+
+    def depositar(self, request, serializer, tipo_conta):
+        valor_deposito = request.data['valor_deposito']
+        if tipo_conta == 'Corrente':
+            novo_saldo = valor_deposito + request.data['saldo_corrente']
+            if serializer.is_valid():
+                serializer.save(saldo_corrente=novo_saldo)
+        elif tipo_conta == 'Poupanca':
+            novo_saldo = valor_deposito + request.data['saldo_poupanca']
+            if serializer.is_valid():
+                serializer.save(saldo_poupanca=novo_saldo)
+
+
 
 class AgenciaViewSet(viewsets.ModelViewSet):
     queryset = Agencia.objects.all()
     serializer_class = AgenciaSerializer
+
+    def update(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace()
+        return super().update(request, args, kwargs)
+
+
 
 
 class TransferenciaViewSet(viewsets.ModelViewSet):
