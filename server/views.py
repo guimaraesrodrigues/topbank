@@ -15,17 +15,21 @@ class ContaViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        # ipdb; ipdb.set_trace()
-        tipo_conta = request.data['tipo_conta']
 
         if request.data['tipo_op'] == 'saque':
-            self.sacar(request, serializer, tipo_conta)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            self.sacar(request, serializer)
+
         elif request.data['tipo_op'] == 'deposito':
-            self.depositar(request, serializer, tipo_conta)
+            instance = Conta.objects.get(pk=request.data['conta_dest'])
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            self.depositar(request, serializer)
+
         elif request.data['tipo_op'] == 'transf':
-            self.transferir(request, serializer, tipo_conta)
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            self.transferir(request, serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -34,8 +38,9 @@ class ContaViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
-    def sacar(self, request, serializer, tipo_conta):
+    def sacar(self, request, serializer):
         valor_saque = request.data['valor_saque']
+        tipo_conta = request.data['tipo_conta']
         if tipo_conta == 'Corrente':
             novo_saldo = request.data['saldo_corrente'] - valor_saque
             if serializer.is_valid():
@@ -48,8 +53,9 @@ class ContaViewSet(viewsets.ModelViewSet):
                 serializer.save(saldo_poupanca=novo_saldo)
             return valor_saque
 
-    def depositar(self, request, serializer, tipo_conta):
+    def depositar(self, request, serializer):
         valor_deposito = request.data['valor_deposito']
+        tipo_conta = request.data['tipo_conta']
         if tipo_conta == 'Corrente':
             novo_saldo = valor_deposito + request.data['saldo_corrente']
             if serializer.is_valid():
@@ -62,8 +68,54 @@ class ContaViewSet(viewsets.ModelViewSet):
                 serializer.save(saldo_poupanca=novo_saldo)
             return valor_deposito
 
-    def transferir(self, request, serializer, tipo_conta):
-        pass
+    def transferir(self, request, serializer):
+        tipo_transf = request.data['tipo_transf']
+        import ipdb;
+        #ipdb.set_trace()
+        if tipo_transf == 'Cc para Cc':
+            request.data['tipo_conta'] = 'Corrente'
+
+            conta_destino = Conta.objects.get(pk=request.data['conta_dest'])
+            request.data['valor_saque'] = request.data['valor_transf']
+
+            valor_transf = self.sacar(request, serializer)
+
+            conta_destino.saldo_corrente = conta_destino.saldo_corrente + valor_transf
+            conta_destino.save()
+
+        elif tipo_transf == 'Cc para P':
+            request.data['tipo_conta'] = 'Corrente'
+
+            conta_destino = Conta.objects.get(pk=request.data['conta_dest'])
+            request.data['valor_saque'] = request.data['valor_transf']
+
+            valor_transf = self.sacar(request, serializer)
+
+            conta_destino.saldo_poupanca = conta_destino.saldo_poupanca + valor_transf
+            conta_destino.save()
+
+        elif tipo_transf == 'DOC':
+            request.data['tipo_conta'] = 'Corrente'
+
+            conta_destino = Conta.objects.get(pk=request.data['conta_dest'])
+            request.data['valor_saque'] = request.data['valor_transf']
+
+            valor_transf = self.sacar(request, serializer)
+
+            conta_destino.saldo_poupanca = conta_destino.saldo_poupanca + valor_transf
+            conta_destino.save()
+
+        elif tipo_transf == 'TED':
+            request.data['tipo_conta'] = 'Corrente'
+
+            conta_destino = Conta.objects.get(pk=request.data['conta_dest'])
+            request.data['valor_saque'] = request.data['valor_transf']
+
+            valor_transf = self.sacar(request, serializer)
+
+            conta_destino.saldo_poupanca = conta_destino.saldo_poupanca + valor_transf
+            conta_destino.save()
+
 
 
 
