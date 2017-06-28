@@ -1,3 +1,5 @@
+from threading import Lock
+
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 
@@ -29,7 +31,13 @@ class ContaViewSet(viewsets.ModelViewSet):
         elif request.data['tipo_op'] == 'transf':
             instance = self.get_object()
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
-            self.transferir(request, serializer)
+
+            lock = Lock()
+            lock.acquire()  # will block if lock is already held
+            try:
+                self.transferir(request, serializer)
+            finally:
+                lock.release()
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
@@ -70,8 +78,7 @@ class ContaViewSet(viewsets.ModelViewSet):
 
     def transferir(self, request, serializer):
         tipo_transf = request.data['tipo_transf']
-        import ipdb;
-        #ipdb.set_trace()
+     
         if tipo_transf == 'Cc para Cc':
             request.data['tipo_conta'] = 'Corrente'
 
@@ -82,6 +89,7 @@ class ContaViewSet(viewsets.ModelViewSet):
 
             conta_destino.saldo_corrente = conta_destino.saldo_corrente + valor_transf
             conta_destino.save()
+
 
         elif tipo_transf == 'Cc para P':
             request.data['tipo_conta'] = 'Corrente'
