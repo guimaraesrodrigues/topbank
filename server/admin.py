@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Conta, Agencia, Transferencia
+from .models import Conta, Agencia
 
 admin.site.register(Conta)
 admin.site.register(Agencia)
-admin.site.register(Transferencia)

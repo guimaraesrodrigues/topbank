@@ -8,8 +8,8 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from server.models import Conta, Agencia, Transferencia
-from server.serializers import UserSerializer, GroupSerializer, ContaSerializer, AgenciaSerializer, TransferenciaSerializer
+from server.models import Conta, Agencia
+from server.serializers import UserSerializer, GroupSerializer, ContaSerializer, AgenciaSerializer
 
 class ContaViewSet(viewsets.ModelViewSet):
     '''Essa classe é responável por manipular ações de conta do usuário
@@ -115,7 +115,7 @@ class ContaViewSet(viewsets.ModelViewSet):
 
             valor_transf = self.sacar(request, serializer)#realizamos um saque na conta origem e guardamos o valor para transf
 
-            conta_destino.saldo_corrente = conta_destino.saldo_corrente + valor_transf#Somamos o saldo atual com o valor sacado da conta origem
+            conta_destino.saldo_corrente = conta_destino.saldo_corrente + valor_transf#Somamos o saldo atual da conta corrente com o valor sacado da conta origem
             conta_destino.save()
 
 
@@ -127,7 +127,7 @@ class ContaViewSet(viewsets.ModelViewSet):
 
             valor_transf = self.sacar(request, serializer)
 
-            conta_destino.saldo_poupanca = conta_destino.saldo_poupanca + valor_transf
+            conta_destino.saldo_poupanca = conta_destino.saldo_poupanca + valor_transf#Somamos o saldo atual da conta poupanca com o valor sacado da conta origem
             conta_destino.save()
 
         elif tipo_transf == 'DOC':
@@ -154,13 +154,12 @@ class ContaViewSet(viewsets.ModelViewSet):
 
 
 
-
+##Views utilizadas para cadastrar agencias, usuarios e grupos no django admin. Essas funcionalidades só tem objetivo de criar dados base para o funcionamento do sistema
 class AgenciaViewSet(viewsets.ModelViewSet):
     queryset = Agencia.objects.all()
     serializer_class = AgenciaSerializer
 
     def update(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace()
         return super().update(request, args, kwargs)
 
 

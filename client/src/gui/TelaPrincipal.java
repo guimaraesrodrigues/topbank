@@ -15,18 +15,17 @@ import org.json.JSONObject;
 import restful.RestServices;
 
 public class TelaPrincipal extends javax.swing.JFrame {
-    String user;
     
-    RestServices rest;
-    JSONObject agencia;
-    JSONObject conta;    
+    String user; //string para mostrar o usuario na tela   
+    RestServices rest;//objeto com serviços restful
+    JSONObject agencia;//objeto json para dados da agencia
+    JSONObject conta; //objeto json para dados da conta
     
-    DefaultListModel modelListaLeiloes = new DefaultListModel();
-    DefaultTableModel modeloTable;
-
     public TelaPrincipal() throws HeadlessException {
     }
     
+
+    //construtor da tela principal. Recebe da TelaLogin os serviços restful e infos da agencia e conta
     public TelaPrincipal(RestServices rest, JSONObject agencia, JSONObject conta) {
         this.rest = rest;
         this.agencia = agencia;
@@ -434,43 +433,46 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         System.exit(0);        
     }//GEN-LAST:event_jButtonSairActionPerformed
-
+    
+    /* Botao que realiza as operaçoes de deposito */
     private void buttonDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDepositoActionPerformed
         
-        String tipoDeposito = (String) deposComboBox.getSelectedItem() ;
-        JSONObject conta_destino = new JSONObject();
-        double novo_saldo = 0;
-        
+        String tipoDeposito = (String) deposComboBox.getSelectedItem();
+        JSONObject conta_destino = new JSONObject();//objeto para representar a conta destino do deposito
+               
         if (contaDepTextField.getText().isEmpty() || valorDepTextField.getText().isEmpty() || tipoDeposito.isEmpty()){
             JOptionPane.showMessageDialog(this, "Insira as infos para deposito!");
             return;
         }
             
-        double deposito = Double.parseDouble(valorDepTextField.getText());          
-        String id_dest = contaDepTextField.getText();
+        double deposito = Double.parseDouble(valorDepTextField.getText());//valor do deposito          
+        String id_dest = contaDepTextField.getText();//numero da conta destino
         
+        //Fazemos GET de informações da conta destino
         try {
-            conta_destino = rest.getMethod(rest.getServices().getString("contas")+id_dest+"");
+            conta_destino = rest.getMethod(rest.getServices().getString("contas")+id_dest+"");//inicializamos o objeto JSON da conta destino
         } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         String tipo_conta = (String) deposComboBox.getSelectedItem();       
-                              
+        
+        /* definição de variaveis a serem utilizadas pelo servidor para manipular o deposito */
         conta_destino.put("valor_deposito", deposito);
         conta_destino.put("tipo_conta", tipo_conta);  
         conta_destino.put("tipo_op", "deposito");
         conta_destino.put("conta_dest", Integer.parseInt(contaDepTextField.getText()));
                
         try {
-            conta = rest.getMethod(rest.getServices().getString("contas")+conta.getInt("id"));
-            conta = rest.putMethod(rest.getServices().getString("contas")+id_dest+"/", conta_destino);
+            conta = rest.getMethod(rest.getServices().getString("contas")+conta.getInt("id"));//pegamos os dados mais recentes da conta antes de realizar o deposito
+            conta = rest.putMethod(rest.getServices().getString("contas")+id_dest+"/", conta_destino);//Fazemos o PUT com os dados para deposito
         } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         statusLabel.setText("Deposito realizado com sucesso!");         
     }//GEN-LAST:event_buttonDepositoActionPerformed
-
+    
+    /* Botao para realizar GET com o saldo da conta solicitada */
     private void buttonSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaldoActionPerformed
        
          try {
@@ -485,6 +487,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Saldo da conta corrente é: R$" + conta.getDouble("saldo_corrente")); 
     }//GEN-LAST:event_buttonSaldoActionPerformed
 
+    
+        /*Botao para realizar saques */
     private void buttonSaqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaqueActionPerformed
         if (valorSaqTextField.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "Insira um valor para saque!");
@@ -533,7 +537,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void valorSaqTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorSaqTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_valorSaqTextFieldActionPerformed
-
+ 
+    /*Botao para manipular GUI */
     private void transfComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transfComboBoxActionPerformed
         String item_seleconado = (String)transfComboBox.getSelectedItem();
         if(item_seleconado.equals("DOC") || item_seleconado.equals("TED"))
@@ -541,7 +546,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         else
             bancoTraTextField.setEditable(false);
     }//GEN-LAST:event_transfComboBoxActionPerformed
-
+ 
+    
+    /*Botao para realizar transferencias */
     private void buttonTransfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTransfActionPerformed
         if (valorTraTextField.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "Insira um valor para transferência!");
